@@ -1,8 +1,8 @@
 "use strict";
 
 // 미션1. switch case문 작성하기
-let cat = "고양이";
-switch (cat) {
+let animal = "cat";
+switch (animal) {
   case "dog":
     console.log("강아지");
     break;
