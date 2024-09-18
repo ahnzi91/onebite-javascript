@@ -71,5 +71,5 @@ console.log(colors); // ['purple', 'skyblue', 'green', 'yellow', 'orange']
 colors.splice(1, 3);
 console.log(colors); // ['purple', 'orange']
 
-// length() : 배열의 크기를 알아볼 수 있는 함수
+// length() : 배열의 크기를 알아볼 수 있는 프로퍼티
 console.log(colors.length);
