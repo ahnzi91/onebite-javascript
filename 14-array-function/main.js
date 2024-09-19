@@ -98,9 +98,9 @@ console.log(arrJoin.join(" ")); // green blue purple yellow
 
 // sort()
 // 정렬해주는 내장 함수. default: 오름차순
-let sort = ["green", "blue", "purple"];
-sort.sort();
-console.log(sort); // ['blue', 'green', 'purple']
+let sortString = ["green", "blue", "purple"];
+sortString.sort();
+console.log(sortString); // ['blue', 'green', 'purple']
 
 // 내림차순
 const compare = (a, b) => {
@@ -108,5 +108,48 @@ const compare = (a, b) => {
   else if (a < b) return 1;
   else return 0;
 };
-sort.sort(compare);
-console.log(sort); // ['purple', 'green', 'blue']
+sortString.sort(compare);
+console.log(sortString); // ['purple', 'green', 'blue']
+
+let sortNumber = [1, 100, 25, 50, 120, 3];
+sortNumber.sort();
+console.log(sortNumber); // [1, 100, 120, 25, 3, 50] <- 사전 순으로 정렬이된다.
+
+// 오름차순
+const compareASCNumber = (a, b) => {
+  return a - b;
+};
+sortNumber.sort(compareASCNumber);
+console.log(sortNumber); // [1, 3, 25, 50, 100, 120]
+
+// 내림차순
+const compareDESCNumber = (a, b) => {
+  return b - a;
+};
+sortNumber.sort(compareDESCNumber);
+console.log(sortNumber); // [120, 100, 50, 25, 3, 1]
+
+// reduce()
+// 배열에 각 요소에 대해 함수를 실행하고 누적된 값을 출력할 때 사용되는 내장 함수
+let forEachNumbers = [1, 100, 25, 50];
+let sum = 0;
+forEachNumbers.forEach((element) => {
+  sum += element;
+});
+console.log(sum); // 176
+
+console.log("-------");
+
+sum = forEachNumbers.reduce((acc, cur, index) => {
+  console.log(acc, cur, index);
+  return acc + cur;
+}, 0);
+console.log(sum);
+
+// isArray()
+// 전달된 매개변수가 배열인지 아닌지 판별하는 내장 함수
+let a = Array.isArray([1, 100, 50]); // true
+let b = Array.isArray({ id: 1, color: "green" }); // false
+let c = Array.isArray("string"); // false
+let d = Array.isArray(undefined); // false
+console.log(a, b, c, d);
