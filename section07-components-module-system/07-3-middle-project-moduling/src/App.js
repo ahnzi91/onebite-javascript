@@ -5,47 +5,56 @@ import { request } from "./components/api.js";
 export default function App($app) {
   //
   this.state = {
-    currentTab: "all",
+    currentTab: window.location.pathname.replace("/", "") || "all",
     photos: [],
   };
 
+  // tab
   const tabBar = new TabBar({
     $app,
     initialState: "",
-    // onClick()
-    // 1. 버튼이 클릭 될 때 실행되는 함수.
-    // 2. 버튼을 누르면 currentTab이라는 상태를 눌린 버튼의 값으로 변경 시켜야 한다.
-    // 3. 눌린 버튼의 상태에 맞는 API를 호출해 알맞은 데이터를 가져와야 한다.
-    // 4. 눌린 버튼에 대한 값은 name이라는 매개변수로 전달받는다.
     onClick: async (name) => {
-      this.setState({
-        ...this.state,
-        currentTab: name,
-        photos: await request(name === "all" ? "" : name),
-      });
+      history.pushState(null, `${name} 사진`, name);
+      this.updateContent(name);
     },
   });
+
+  // content
   const content = new Content({
     $app,
     initialState: [],
   });
 
+  // state
   this.setState = (newState) => {
     this.state = newState;
     tabBar.setState(this.state.currentTab);
     content.setState(this.state.photos);
   };
-  // 웹 페이지에 초기 상태값을 설정해주는 init 함수 추가
-  const init = async () => {
+
+  // update
+  this.updateContent = async (tabName) => {
     try {
-      const initialPhotos = await request();
+      const currentTab = tabName === "all" ? "" : tabName;
+      const photos = await request(currentTab);
       this.setState({
         ...this.setState,
-        photos: initialPhotos,
+        currentTab: tabName,
+        photos: photos,
       });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  // popstate
+  window.addEventListener("popstate", async () => {
+    this.updateContent(window.location.pathname.replace("/", "") || "all");
+  });
+
+  // 웹 페이지에 초기 상태값을 설정해주는 init 함수 추가
+  const init = async () => {
+    this.updateContent(this.state.currentTab);
   };
 
   init();
