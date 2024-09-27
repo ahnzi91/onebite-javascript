@@ -5,8 +5,8 @@
 const API_URL = "https://animal-api-two.vercel.app/";
 
 // API
-export const request = async () => {
-  let res = await fetch(API_URL);
+export const request = async (name) => {
+  let res = await fetch(name ? `${API_URL}${name}` : API_URL);
 
   try {
     if (res) {
