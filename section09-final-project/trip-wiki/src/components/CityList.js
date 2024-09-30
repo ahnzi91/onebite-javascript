@@ -1,10 +1,43 @@
-export default function CityList() {
+export default function CityList({ $app, initialState, handleLoadMore }) {
+  this.state = initialState;
   this.$target = document.createElement("div");
   this.$target.className = "city-list";
 
-  this.template = () => {};
+  this.handleLoadMore = handleLoadMore;
 
-  this.render = () => {};
+  $app.appendChild(this.$target);
+
+  this.template = () => {
+    let temp = `<div class="city-items-container">`;
+    if (this.state) {
+      this.state.cities.forEach((element) => {
+        temp += `
+          <div id=${element.id} class="city-item">
+            <img src=${element.image} />
+            <div class="city-item-info">${element.city}, ${element.country}</div>
+            <div class="city-item-score">⭐️ ${element.total}</div>
+          </div>
+        `;
+      });
+      temp += `</div>`;
+    }
+    return temp;
+  };
+
+  this.render = () => {
+    this.$target.innerHTML = this.template();
+
+    if (!this.state.isEnd) {
+      const $loadMoreButton = document.createElement("button");
+      $loadMoreButton.className = "add-items-btn";
+      $loadMoreButton.textContent = "+ 더보기";
+      this.$target.appendChild($loadMoreButton);
+
+      $loadMoreButton.addEventListener("click", () => {
+        this.handleLoadMore();
+      });
+    }
+  };
 
   this.setState = (newState) => {
     this.state = newState;
