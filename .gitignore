@@ -1,0 +1,26 @@
+# Node modules 디렉토리 무시
+node_modules/
+
+# 로그 파일들
+*.log
+
+# 환경 설정 파일들 (환경별로 다를 수 있음)
+.env
+
+# npm 패키지 설치 시 생성되는 lock 파일들 (선택 사항)
+package-lock.json
+yarn.lock
+
+# 빌드/배포용 파일
+dist/
+build/
+
+# OS 관련 파일 (macOS, Windows 등)
+.DS_Store
+Thumbs.db
+
+# 기타 불필요한 파일
+*.tgz
+
+
+.DS_Store
