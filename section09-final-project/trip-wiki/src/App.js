@@ -3,7 +3,7 @@ import RegionList from "./components/RegionList.js";
 import CityList from "./components/CityList.js";
 import CityDetail from "./components/CityDetail.js";
 
-import { request } from "./components/api.js";
+import { request, requestCityDetail } from "./components/api.js";
 
 export default function App($app) {
   const getSortBy = () => {
@@ -35,6 +35,7 @@ export default function App($app) {
       initialState: {
         sortBy: this.state.sortBy,
         searchWord: this.state.searchWord,
+        currentPage: this.state.currentPage,
       },
       handleSortChange: async (sortBy) => {
         const pageUrl = `/${this.state.region}?sort=${sortBy}`;
@@ -105,8 +106,27 @@ export default function App($app) {
     });
   };
 
-  const renderCityDetail = () => {
-    new CityDetail();
+  const renderCityDetail = async (cityId) => {
+    try {
+      const cityDetailData = await requestCityDetail(cityId);
+      new CityDetail({ $app, initialState: cityDetailData });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const render = () => {
+    const path = this.state.currentPage;
+    $app.innerHTML = "";
+    if (path.startsWith("/city/")) {
+      const cityId = path.split("/city/")[1];
+      renderHeader();
+      renderCityDetail(cityId);
+    } else {
+      renderHeader();
+      renderRegionList();
+      renderCityList();
+    }
   };
 
   this.setState = (newState) => {
@@ -114,16 +134,17 @@ export default function App($app) {
     render();
   };
 
-  const render = () => {
+  const init = async () => {
     const path = this.state.currentPage;
     $app.innerHTML = "";
     if (path.startsWith("/city/")) {
-      renderHeader();
-      renderCityDetail();
+      render();
     } else {
-      renderHeader();
-      renderRegionList();
-      renderCityList();
+      const cities = await request(this.state.startIndex, this.state.region, this.state.sortBy, this.state.searchWord);
+      this.setState({
+        ...this.state,
+        cities: cities,
+      });
     }
   };
 
@@ -146,20 +167,6 @@ export default function App($app) {
       currentPage: urlPath,
     });
   });
-
-  const init = async () => {
-    const path = this.state.currentPage;
-    $app.innerHTML = "";
-    if (path.startsWith("/city/")) {
-      render();
-    } else {
-      const cities = await request(this.state.startIndex, this.state.region, this.state.sortBy, this.state.searchWord);
-      this.setState({
-        ...this.state,
-        cities: cities,
-      });
-    }
-  };
 
   init();
 }
