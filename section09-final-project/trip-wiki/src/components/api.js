@@ -1,4 +1,4 @@
-const API_URL = "https://trip-wiki-api.vercel.app";
+const API_URL = "https://trip-wiki-api.vercel.app/";
 
 // App.js 파일에서 모듈로 사용할 수 있는 함수
 export const request = async (startIndex, region, sortBy, searchWord) => {
@@ -19,9 +19,13 @@ export const request = async (startIndex, region, sortBy, searchWord) => {
       url += `&search=${searchWord}`;
     }
 
+    console.log(url);
+
+    // API 호출
     const response = await fetch(url);
     if (response) {
       let data = await response.json();
+      console.log(data);
       return data;
     }
   } catch (error) {
